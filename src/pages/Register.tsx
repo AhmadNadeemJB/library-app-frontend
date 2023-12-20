@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 
+
 const App: React.FC = () => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -13,13 +14,10 @@ const App: React.FC = () => {
   const toast = useToast();
 
   const handleRegister = async () => {
+    const url = "http://localhost:3000/register";
     try {
       await axios
-        .post(
-          "http://localhost:3000/register",
-          { fullname, email, password },
-          { withCredentials: true }
-        )
+        .post(url, { fullname, email, password }, { withCredentials: true })
         .then((e) => {
           console.log(e.data.message);
           toast({
