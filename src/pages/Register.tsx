@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleRegister = async (e: any) => {
+  const handleRegister = async () => {
     try {
       await axios
         .post(
