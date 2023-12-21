@@ -6,12 +6,14 @@ import { useToast } from "@chakra-ui/react";
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-  const URL = "https://cyan-upset-skunk.cyclic.app";
-  // const URL = "http://localhost:3000";
+  // const URL = "https://cyan-upset-skunk.cyclic.app";
+  const URL = "http://localhost:3000";
 
   function handleLogout() {
+    setLoading(true);
     axios
       .get(URL + "/logout", { withCredentials: true })
       .then(async (response) => {
@@ -29,6 +31,9 @@ const ProfilePage: React.FC = () => {
       })
       .catch((error) => {
         console.log("Error while logging out : ", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 

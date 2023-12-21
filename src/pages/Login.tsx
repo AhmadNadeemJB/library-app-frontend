@@ -15,8 +15,8 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const URL = "https://cyan-upset-skunk.cyclic.app";
-      // const URL = "http://localhost:3000";
+      // const URL = "https://cyan-upset-skunk.cyclic.app";
+      const URL = "http://localhost:3000";
       const response = await axios.post(
         `${URL}/login`,
         { email, password },
