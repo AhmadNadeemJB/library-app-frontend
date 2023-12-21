@@ -4,8 +4,6 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProfilePage from "./pages/ProfilePage";
 import Home from "./pages/Home";
-import { Button } from "@chakra-ui/react";
-import { Link } from "@chakra-ui/react";
 function App() {
   return (
     <>

@@ -14,8 +14,8 @@ const App: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // const URL = "https://cyan-upset-skunk.cyclic.app";
-    const URL = "http://localhost:3000";
+    const URL = "https://cyan-upset-skunk.cyclic.app";
+    // const URL = "http://localhost:3000";
     try {
       setLoading(true);
       const response = await axios.post(
@@ -24,7 +24,8 @@ const App: React.FC = () => {
         { withCredentials: true }
       );
 
-      console.log(response.data.message);
+      // console.log(response.data.message);
+      // console.log(response);
       toast({
         title: response.data.message,
         status: "success",
@@ -35,9 +36,12 @@ const App: React.FC = () => {
 
       navigate("/profile");
     } catch (error: any) {
-      console.error(error.response.data.message);
+      const responseOrError =
+        error.response.data.error || error.response.data.message;
+      console.error(responseOrError);
+      // console.log(error);
       toast({
-        title: error.response.data.message,
+        title: responseOrError,
         status: "error",
         duration: 4000,
         isClosable: true,
