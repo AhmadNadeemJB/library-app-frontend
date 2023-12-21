@@ -8,10 +8,12 @@ const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
   const toast = useToast();
   const navigate = useNavigate();
+  const URL = "https://cyan-upset-skunk.cyclic.app";
+  // const URL = "http://localhost:3000";
 
   function handleLogout() {
     axios
-      .get("http://localhost:3000/logout", { withCredentials: true })
+      .get(URL + "/logout", { withCredentials: true })
       .then(async (response) => {
         console.log(response);
         setUserData("");
@@ -32,7 +34,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/profile", { withCredentials: true })
+      .get(URL + "/profile", { withCredentials: true })
       .then(async (response) => {
         setUserData(response.data);
       })
