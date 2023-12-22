@@ -1,7 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
+  useEffect(() => {
+    console.log(import.meta.env.VITE_REACT_APP_NAME);
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-7xl font-bold mb-8">Welcome to Your App</h1>
