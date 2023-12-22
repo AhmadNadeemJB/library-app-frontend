@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
+import { set } from "lodash";
 
 const App: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -9,22 +10,66 @@ const App: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [fullnameError, setFullnameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [buttonDisable, setButtonDisable] = useState(false);
+
   const navigate = useNavigate();
   const toast = useToast();
 
+  const validateForm = () => {
+    let isValid = true;
+
+    // Validate Full Name
+    if (!fullname.trim() || !/\s/.test(fullname) || /^\S+\s*$/.test(fullname)) {
+      setFullnameError("Enter your full name");
+      isValid = false;
+    }
+    // Validate Email
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      isValid = false;
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      setEmailError("Invalid email address");
+      isValid = false;
+    }
+
+    // Validate Password
+    if (!password.trim()) {
+      setPasswordError("Password is required");
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      isValid = false;
+    } else if (password.length > 20) {
+      setPasswordError("Password must not exceed 20 characters");
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const URL = import.meta.env.VITE_SERVER_URL;
+    setLoading(true);
+
+    // Form Validation
+    if (!validateForm()) {
+      setLoading(false);
+      setButtonDisable(true);
+      return;
+    }
+
     try {
-      setLoading(true);
+      console.log(fullname, email, password)
+      const URL = import.meta.env.VITE_SERVER_URL;
       const response = await axios.post(
         `${URL}/register`,
         { fullname, email, password },
         { withCredentials: true }
       );
 
-      // console.log(response.data.message);
-      // console.log(response);
       toast({
         title: response.data.message,
         status: "success",
@@ -37,8 +82,7 @@ const App: React.FC = () => {
     } catch (error: any) {
       const responseOrError =
         error.response.data.error || error.response.data.message;
-      console.error(responseOrError);
-      // console.log(error);
+
       toast({
         title: responseOrError,
         status: "error",
@@ -67,9 +111,18 @@ const App: React.FC = () => {
             type="text"
             id="username"
             value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
-            className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300 mb-4"
+            onChange={(e) => {
+              setFullname(e.target.value);
+              setFullnameError("");
+              setButtonDisable(false);
+            }}
+            className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300"
           />
+          <div className="mb-2 mt-1">
+            {fullnameError && (
+              <p className="text-red-500 text-sm">{fullnameError}</p>
+            )}
+          </div>
           <label
             className="block font-medium text-sm text-gray-700 mb-1"
             htmlFor="email"
@@ -80,9 +133,16 @@ const App: React.FC = () => {
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300 mb-4"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setButtonDisable(false);
+              setEmailError("");
+            }}
+            className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300 "
           />
+          <div className="mb-2 mt-1">
+            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
+          </div>
           <label
             className="block font-medium text-sm text-gray-700 mb-1"
             htmlFor="password"
@@ -93,13 +153,22 @@ const App: React.FC = () => {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300 mb-6"
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setButtonDisable(false);
+              setPasswordError("");
+            }}
+            className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300 "
           />
+          <div className="mb-4 mt-1">
+            {passwordError && (
+              <p className="text-red-500 text-sm">{passwordError}</p>
+            )}
+          </div>
           <button
             type="submit"
             className="disabled:opacity-50 disabled:scale-[0.95] disabled:cursor-not-allowed w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition duration-300"
-            disabled={loading}
+            disabled={loading || buttonDisable}
           >
             {loading ? "Loading..." : "Register"}
           </button>
