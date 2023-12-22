@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HomePage = () => {
   useEffect(() => {
-    console.log(import.meta.env.VITE_REACT_APP_NAME);
+    console.log(import.meta.env.VITE_SERVER_URL);
   }, []);
 
   return (

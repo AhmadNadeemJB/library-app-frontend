@@ -9,8 +9,7 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-  const URL = "https://cyan-upset-skunk.cyclic.app";
-  // const URL = "http://localhost:3000";
+  const URL = import.meta.env.VITE_SERVER_URL
 
   function handleLogout() {
     setLoading(true);

@@ -54,8 +54,7 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      const URL = "https://cyan-upset-skunk.cyclic.app";
-      // const URL = "http://localhost:3000";
+      const URL = import.meta.env.VITE_SERVER_URL;
       const response = await axios.post(
         `${URL}/login`,
         { email, password },

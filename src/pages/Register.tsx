@@ -14,8 +14,7 @@ const App: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const URL = "https://cyan-upset-skunk.cyclic.app";
-    // const URL = "http://localhost:3000";
+    const URL = import.meta.env.VITE_SERVER_URL;
     try {
       setLoading(true);
       const response = await axios.post(
