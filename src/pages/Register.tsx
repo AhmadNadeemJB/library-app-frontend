@@ -5,12 +5,12 @@ import { useToast } from "@chakra-ui/react";
 import { set } from "lodash";
 
 const App: React.FC = () => {
-  const [fullname, setFullname] = useState("");
+  const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [fullnameError, setFullnameError] = useState("");
+  const [usernameError, setusernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [buttonDisable, setButtonDisable] = useState(false);
@@ -22,8 +22,8 @@ const App: React.FC = () => {
     let isValid = true;
 
     // Validate Full Name
-    if (!fullname.trim() || !/\s/.test(fullname) || /^\S+\s*$/.test(fullname)) {
-      setFullnameError("Enter your full name");
+    if (!username.trim() || !/\s/.test(username) || /^\S+\s*$/.test(username)) {
+      setusernameError("Enter your full name");
       isValid = false;
     }
     // Validate Email
@@ -62,11 +62,11 @@ const App: React.FC = () => {
     }
 
     try {
-      console.log(fullname, email, password)
+      console.log(username, email, password)
       const URL = import.meta.env.VITE_SERVER_URL;
       const response = await axios.post(
         `${URL}/register`,
-        { fullname, email, password },
+        { username, email, password },
         { withCredentials: true }
       );
 
@@ -110,17 +110,17 @@ const App: React.FC = () => {
           <input
             type="text"
             id="username"
-            value={fullname}
+            value={username}
             onChange={(e) => {
-              setFullname(e.target.value);
-              setFullnameError("");
+              setusername(e.target.value);
+              setusernameError("");
               setButtonDisable(false);
             }}
             className="w-full border px-3 py-2 rounded-md text-gray-700 focus:outline-none focus:border-blue-500 transition duration-300"
           />
           <div className="mb-2 mt-1">
-            {fullnameError && (
-              <p className="text-red-500 text-sm">{fullnameError}</p>
+            {usernameError && (
+              <p className="text-red-500 text-sm">{usernameError}</p>
             )}
           </div>
           <label
