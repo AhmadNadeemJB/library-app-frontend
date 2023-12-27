@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
       );
 
       toast({
-        title: `Logged In as ${response.data.fullname}`,
+        title: `Logged In as ${response.data.username}`,
         status: "success",
         duration: 4000,
         isClosable: true,

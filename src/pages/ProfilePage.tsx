@@ -56,7 +56,7 @@ const ProfilePage: React.FC = () => {
           <label className="block font-medium text-sm text-gray-700 mb-1">
             Username
           </label>
-          <p className="text-gray-800">{userData ? userData.fullname : ""}</p>
+          <p className="text-gray-800">{userData ? userData.username : ""}</p>
         </div>
         <div className="mb-6">
           <label className="block font-medium text-sm text-gray-700 mb-1">
