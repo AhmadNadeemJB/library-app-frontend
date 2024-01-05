@@ -55,17 +55,11 @@ const LoginPage: React.FC = () => {
 
       navigate("/profile");
     } catch (error: any) {
-      const responseOrError =
-        error.response.data.error || error.response.data.message;
-      {
-        responseOrError
-          ? toast({
-              title: responseOrError,
-              duration: 4000,
-              variant: "destructive",
-            })
-          : null;
-      }
+      toast({
+        title: error.response.data.error || error.response.data.message,
+        duration: 4000,
+        variant: "destructive",
+      });
 
       setProfileData((prevData) => ({
         ...prevData,

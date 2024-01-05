@@ -52,21 +52,12 @@ const App: React.FC = () => {
 
       navigate("/profile");
     } catch (error: any) {
-      const responseOrError =
-        error.response.data.error || error.response.data.message;
-
       toast({
-        title: responseOrError,
+        title: error.response.data.error || error.response.data.message,
         duration: 4000,
       });
     } finally {
       setLoading(false);
-
-      setProfileData({
-        email: "",
-        password: "",
-        username: "",
-      });
     }
   };
 

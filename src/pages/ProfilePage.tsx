@@ -94,10 +94,14 @@ const ProfilePage: React.FC = () => {
   const { mutateAsync: updateUser } = useMutation(handleUpdate, {
     onError: (error: any) => {
       toast({
-        title: error.response.data.message,
+        title: error.response.data.message || error.response.data.error,
         duration: 4000,
         variant: "destructive",
       });
+      setProfileData((prevData) => ({
+        ...prevData,
+        currentPassword: "",
+      }));
       setLoading(false);
     },
     onSuccess: () => {
@@ -153,9 +157,9 @@ const ProfilePage: React.FC = () => {
           </div>
 
           {/* First Dialog */}
-          <div className="flex justify-between ">
+          <div className="flex justify-between items-center">
             <Dialog modal open={open1} onOpenChange={setOpen1}>
-              <h1 className="text-3xl leading-snug font-bold mb-2 break-words line-clamp-2">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2 break-words line-clamp-2">
                 {userData ? userData.username : ""}
               </h1>
               <DialogTrigger asChild>
@@ -191,6 +195,7 @@ const ProfilePage: React.FC = () => {
                             currentPassword: e.target.value,
                           }));
                         }}
+                        value={profileData.currentPassword}
                         id="currentPassword1"
                         placeholder="Enter your current password"
                         type="password"
@@ -216,7 +221,7 @@ const ProfilePage: React.FC = () => {
           </div>
 
           {/* Second Dialog */}
-          <div className="flex justify-between py-2 mb-4">
+          <div className="flex justify-between items-center py-2 mb-4">
             <Dialog modal open={open2} onOpenChange={setOpen2}>
               <h1 className="text-xl mb-2 line-clamp-1 break-words">
                 {userData ? userData.email : ""}
@@ -257,6 +262,7 @@ const ProfilePage: React.FC = () => {
                             currentPassword: e.target.value,
                           }));
                         }}
+                        value={profileData.currentPassword}
                         id="currentPassword2"
                         placeholder="Enter your current password"
                         type="password"
@@ -315,6 +321,7 @@ const ProfilePage: React.FC = () => {
                             currentPassword: e.target.value,
                           }));
                         }}
+                        value={profileData.currentPassword}
                         id="currentPassword3"
                         placeholder="Enter your current password"
                         type="password"
