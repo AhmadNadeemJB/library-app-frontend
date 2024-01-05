@@ -1,18 +1,19 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
+
+import LoginOrSignup from "./pages/LoginOrSignup";
 import ProfilePage from "./pages/ProfilePage";
-import Home from "./pages/Home";
+import ModeToggle from "./components/mode-toggle";
 function App() {
   return (
     <>
-      <div>
+      <div className="bg-slate-100 dark:bg-slate-950">
         <BrowserRouter>
+          <div className="absolute top-3 sm:top-6 right-4 sm:right-7">
+            <ModeToggle />
+          </div>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<LoginOrSignup />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </BrowserRouter>
