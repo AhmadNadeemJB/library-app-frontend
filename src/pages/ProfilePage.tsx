@@ -85,6 +85,14 @@ const ProfilePage: React.FC = () => {
     return response.data.user; // Assuming your API returns the updated user data
   }
 
+  async function handleDelete() {
+    const response = await axios.delete(URL + "/delete", {
+      data: { currentPassword: profileData.currentPassword },
+      withCredentials: true,
+    });
+    return response;
+  }
+
   const queryClient = useQueryClient();
 
   const { data: userData, isLoading: isUserDataLoading } = useQuery(
@@ -128,6 +136,43 @@ const ProfilePage: React.FC = () => {
     },
   });
 
+  const { mutateAsync: deleteUser, isLoading } = useMutation(handleDelete, {
+    onError: (error: any) => {
+      toast({
+        title: error.response.data.message || error.response.data.error,
+        duration: 4000,
+        variant: "destructive",
+      });
+      setProfileData((prevData) => ({
+        ...prevData,
+        currentPassword: "",
+      }));
+      setLoading(false);
+    },
+    onSuccess: () => {
+      setOpen1(false);
+      setOpen2(false);
+      setOpen3(false);
+
+      setLoading(false);
+
+      setProfileData({
+        currentPassword: "",
+        email: "",
+        newPassword: "",
+        username: "",
+      });
+
+      queryClient.invalidateQueries("userData");
+
+      toast({
+        title: "Profile Deleted successfully",
+        duration: 4000,
+        variant: "destructive",
+      });
+    },
+  });
+
   if (isUserDataLoading)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -147,16 +192,6 @@ const ProfilePage: React.FC = () => {
     <div className="flex items-center justify-center h-screen w-full">
       <div className="flex flex-col px-4 md:px-32 w-11/12 sm:w-9/12 lg:w-6/12">
         <Card className="p-4 sm:p-7">
-          <div className="flex justify-center mb-4 md:mb-8">
-            <Avatar className="h-32 w-32 mb-1">
-              <AvatarImage
-                alt="User's Name"
-                src="/placeholder.svg?height=128&width=128"
-              />
-              <AvatarFallback>UN</AvatarFallback>
-            </Avatar>
-          </div>
-
           {/* First Dialog */}
           <div className="flex justify-between items-center">
             <Dialog modal open={open1} onOpenChange={setOpen1}>
@@ -344,16 +379,63 @@ const ProfilePage: React.FC = () => {
               </DialogContent>
             </Dialog>
           </div>
-          <Button
-            onClick={() => {
-              handleLogout();
-            }}
-            variant="destructive"
-            className="w-full"
-            disabled={loading}
-          >
-            Logout
-          </Button>
+          <div className="flex gap-x-2">
+            <Button
+              onClick={() => {
+                handleLogout();
+              }}
+              variant="destructive"
+              className="w-full"
+              disabled={loading}
+            >
+              Logout
+            </Button>
+
+            <Dialog modal open={open3} onOpenChange={setOpen3}>
+              <DialogTrigger asChild>
+                <Button variant="destructive" className="w-full">
+                  Delete Account
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="w-11/12 rounded-lg">
+                <DialogHeader>
+                  <DialogTitle>This action can't be undone</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={(e: any) => e.preventDefault()}>
+                  <div className="grid gap-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="currentPassword4">Current Password</Label>
+                      <Input
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setProfileData((prevData) => ({
+                            ...prevData,
+                            currentPassword: e.target.value,
+                          }));
+                        }}
+                        value={profileData.currentPassword}
+                        id="currentPassword4"
+                        placeholder="Enter your current password"
+                        type="password"
+                      />
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        disabled={isLoading}
+                        onClick={() => {
+                          deleteUser();
+                        }}
+                        type="submit"
+                        className="ml-auto"
+                        variant="destructive"
+                      >
+                        Confirm
+                      </Button>
+                    </DialogFooter>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         </Card>
       </div>
     </div>
