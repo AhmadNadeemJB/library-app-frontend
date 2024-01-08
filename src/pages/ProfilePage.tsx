@@ -326,7 +326,7 @@ const ProfilePage: React.FC = () => {
           <div className="flex justify-between">
             <Dialog modal open={open3} onOpenChange={setOpen3}>
               <DialogTrigger asChild>
-                <Button className="mb-2 w-full">Change Password</Button>
+                <Button variant="outline" className="mb-2 w-full">Change Password</Button>
               </DialogTrigger>
               <DialogContent className="w-11/12 rounded-lg">
                 <DialogHeader>
@@ -384,7 +384,7 @@ const ProfilePage: React.FC = () => {
               onClick={() => {
                 handleLogout();
               }}
-              variant="destructive"
+              variant="default"
               className="w-full"
               disabled={loading}
             >
